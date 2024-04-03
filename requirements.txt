@@ -1,0 +1,9 @@
+python-dotenv
+pandas
+openai
+langchain
+pillow
+pydantic
+beautifulsoup4
+streamlit
+requests
