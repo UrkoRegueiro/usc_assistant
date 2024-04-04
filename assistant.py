@@ -8,7 +8,7 @@ from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
 from langchain.schema import SystemMessage
 from langchain.prompts import MessagesPlaceholder
 
-from app.tools import AreasTool
+from app.tools import AreasTool, GradosTool
 
 
 
@@ -37,13 +37,15 @@ with st.sidebar:
 if stop:
     st.stop()
 
-tools = [AreasTool()]
+tools = [AreasTool(), GradosTool()]
 messages = StreamlitChatMessageHistory(key="langchain_messages")
 memory = ConversationBufferMemory(chat_memory=messages, return_messages=True)
 
 fixed_prompt = '''Assistant is a large language model trained by OpenAI.
 
 Assistant is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, Assistant is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
+
+Assistant doesn't know anything about degrees in Universidad de Santiago de Compostela or other universities.
 
 Assistant is constantly learning and improving, and its capabilities are constantly evolving. It is able to process and understand large amounts of text, and can use this knowledge to provide accurate and informative responses to a wide range of questions. Additionally, Assistant is able to generate its own text based on the input it receives, allowing it to engage in discussions and provide explanations and descriptions on a wide range of topics.
 
