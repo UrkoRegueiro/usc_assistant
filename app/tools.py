@@ -18,13 +18,14 @@ class AreasTool(BaseTool):
         areas = get_areas()
         return areas
 
-    class GradosTool(BaseTool):
-        name = "obten_grados_area"
-        description = "Obtiene los diferentes grados que ofrece un area de estudio de la universidad a partir del url del area de estudio. Los grados estan descritos por 'grado', 'campus' y 'grado_url'."
+class GradosTool(BaseTool):
+    name = "obten_grados_area"
+    description = "Obtiene los grados o carreras disponibles en un area de estudio. Los grados estan descritos por 'grado', 'campus' y 'grado_url'."
 
-        def _run(self, area_url: str):
-            grados = get_degrees(area_url)
-            return grados
+    def _run(self, area_url: str):
 
-        args_schema: Optional[Type[BaseModel]] = Grados
+        grados = get_degrees(area_url)
+        return grados
+
+    args_schema: Optional[Type[BaseModel]] = Grados
 

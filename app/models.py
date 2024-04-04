@@ -2,4 +2,4 @@ from pydantic import BaseModel, Field
 
 
 class Grados(BaseModel):
-    url: str = Field(..., description="The url to access the information schema")
+    area_url: str = Field(..., description="La url para acceder a los grados o carreras disponibles en un area de estudio.")
