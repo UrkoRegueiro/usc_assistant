@@ -25,7 +25,7 @@ def get_areas():
     return areas_estudio
 
 
-def get_degrees(area_url: str = None):
+def get_degrees(area_url: str)
     response = requests.get(area_url)
     soup = BeautifulSoup(response.text, 'html.parser')
 
