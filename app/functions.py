@@ -23,3 +23,21 @@ def get_areas():
         areas_estudio.append(area_info)
 
     return areas_estudio
+
+
+def get_degrees(area_url: str = None):
+    response = requests.get(area_url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    grados = soup.find("div", class_="tier-content").find_all("article", class_="is-studies")
+
+    info_grados = []
+
+    for grado in grados:
+        info_grado = {"grado": grado.find("h2").string,
+                      "campus": grado.find("p").string,
+                      "grado_url": usc_url + grado.find("a")["href"]}
+
+        info_grados.append(info_grado)
+
+    return info_grados
