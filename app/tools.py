@@ -3,9 +3,9 @@ from typing import Optional, Type, List, Tuple, Union, Dict
 from langchain.tools import BaseTool
 from pydantic import BaseModel
 
-from app.models import Estudios, Tipo
+from app.models import Estudios, Tipo, Deporte
 
-from app.functions import get_areas, get_estudios, get_notas_corte
+from app.functions import get_areas, get_estudios, get_notas_corte, get_becas, get_calendario, get_deportes
 
 
 class AreasTool(BaseTool):
@@ -39,3 +39,34 @@ class NotasTool(BaseTool):
         notas = get_notas_corte()
         return notas
 
+class BecasTool(BaseTool):
+    name= "obten_becas"
+    description = "Obtiene las becas que ofrece la universidad."
+
+    def _to_args_and_kwargs(self, tool_input: Union[str, Dict]) -> Tuple[Tuple, Dict]:
+        return (), {}
+    def _run(self):
+        becas = get_becas()
+        return becas
+
+class CalendarioTool(BaseTool):
+    name= "obten_calendario"
+    description = "Obtiene el calendario escolar del presente curso."
+
+    def _to_args_and_kwargs(self, tool_input: Union[str, Dict]) -> Tuple[Tuple, Dict]:
+        return (), {}
+    def _run(self):
+        calendario = get_calendario()
+        return calendario
+
+
+class DeportesTool(BaseTool):
+    name = "obten_deportes"
+    description = "Obtiene informacion a cerca de deportes en la universidad. La informacion viene descritas por 'titulo_deporte' y 'url_deporte'."
+
+    def _run(self, tipo_deporte: str = "instalaciones"):
+
+        deportes = get_deportes(tipo_deporte)
+        return deportes
+
+    args_schema: Optional[Type[BaseModel]] = Deporte

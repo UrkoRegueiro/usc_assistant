@@ -8,7 +8,7 @@ from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
 from langchain.schema import SystemMessage
 from langchain.prompts import MessagesPlaceholder
 
-from app.tools import AreasTool, EstudiosTool, NotasTool
+from app.tools import AreasTool, EstudiosTool, NotasTool, BecasTool, CalendarioTool, DeportesTool
 
 
 
@@ -37,7 +37,7 @@ with st.sidebar:
 if stop:
     st.stop()
 
-tools = [AreasTool(), EstudiosTool(), NotasTool()]
+tools = [AreasTool(), EstudiosTool(), NotasTool(), BecasTool(), CalendarioTool(), DeportesTool()]
 messages = StreamlitChatMessageHistory(key="langchain_messages")
 memory = ConversationBufferMemory(chat_memory=messages, return_messages=True)
 
@@ -47,7 +47,11 @@ Assistant is designed to be able to assist with a wide range of tasks, from answ
 
 Assistant doesn't know anything about degrees in Universidad de Santiago de Compostela or other universities.
 
-Assistant will use 'NotasTool' tool only once to the asnwer a user question about notas of every degree of a certain area.
+Assistant doesn't know anything about the university calendar.
+
+Assistant will use 'DeportesTool' tool to offer information about any sport to find this activity.
+
+Assistant will use 'NotasTool' tool only once to the answer a user question about notas of every degree of a certain area.
 
 Assistant is constantly learning and improving, and its capabilities are constantly evolving. It is able to process and understand large amounts of text, and can use this knowledge to provide accurate and informative responses to a wide range of questions. Additionally, Assistant is able to generate its own text based on the input it receives, allowing it to engage in discussions and provide explanations and descriptions on a wide range of topics.
 
