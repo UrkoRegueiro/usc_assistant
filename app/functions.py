@@ -67,6 +67,83 @@ def get_notas_corte():
 
 
 def get_becas():
-    becas_url = usc_url + f"/es/admision/bolsas"
+    becas_url = usc_url + f"/es/servicios/area/becas-ayudas/becas-ayudas"
 
+    response = requests.get(becas_url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    attrs = {"id": "block-usc-theme-content"}
+    info_becas = soup.find("div", attrs=attrs)
+
+    informacion_becas = []
+
+    seccion_1 = info_becas.find_all("article", class_="is-program")
+    for beca in seccion_1:
+        informacion_beca = {"categoria": info_becas.find("div", class_="at-lead-text").find("p").get_text(),
+                            "titulo": beca.find("span", class_="title-inner-wrapper").get_text(),
+                            "descripcion": beca.find("div", class_="at-text").get_text(),
+                            "url_beca": usc_url + beca.find("a", class_="banner-link")["href"]}
+
+        informacion_becas.append(informacion_beca)
+
+    seccion_2 = info_becas.find_all("div", class_="col-lg-6")
+    for beca in seccion_2:
+        informacion_beca = {"categoria": beca.find("h2", class_="tier-title").get_text(),
+                            "titulo": beca.find("span", class_="title-inner-wrapper").get_text(),
+                            "descripcion": beca.find("div", class_="at-text").get_text(),
+                            "url_beca": usc_url + beca.find("a", class_="banner-link")["href"]}
+
+        informacion_becas.append(informacion_beca)
+
+    return informacion_becas
+
+def get_calendario():
+    calendario_url = usc_url + f"/es/calendario-academico"
+
+    response = requests.get(calendario_url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    attrs = {"id": "block-usc-theme-content"}
+    info_calendario = soup.find("div", attrs=attrs).get_text()
+
+    return info_calendario
+
+def get_deportes(tipo_deporte: str = "instalaciones"):
+
+    if tipo_deporte == 'instalaciones':
+        deportes_url = usc_url + f"/es/servicios/area/deporte/{tipo_deporte}"
+
+        response = requests.get(deportes_url)
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        deportes = soup.find_all("article", class_="is-services")
+
+        info_deportes = []
+
+        for deporte in deportes:
+            info_deporte = {"titulo_deporte": deporte.find("span", class_="title-inner-wrapper").get_text(),
+                            "url_deporte": usc_url + deporte.find("a", class_="banner-link")["href"]}
+
+            info_deportes.append(info_deporte)
+
+    if tipo_deporte == 'actividades':
+        deportes_url_solitario = usc_url + f"/es/servicios/area/deporte/'practica-libre'"
+        deportes_url_grupo = usc_url + f"/es/servicios/area/deporte/actividad-dirigida-escuelas"
+
+        urls = [deportes_url_solitario, deportes_url_grupo]
+        info_deportes = []
+
+        for url in urls:
+            response = requests.get(url)
+            soup = BeautifulSoup(response.text, 'html.parser')
+
+            deportes = soup.find_all("article", class_="is-services")
+
+            for deporte in deportes:
+                info_deporte = {"titulo_deporte": deporte.find("span", class_="title-inner-wrapper").get_text(),
+                                "url_deporte": deporte.find("a", class_="banner-link")["href"]}
+
+                info_deportes.append(info_deporte)
+
+    return info_deportes
 
