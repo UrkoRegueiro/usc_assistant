@@ -61,7 +61,14 @@ system_message = SystemMessage(content= fixed_prompt)
 
 
 if len(messages.messages) == 0:
-    messages.add_ai_message("Bienvenido a la USC, soy tu asistente personal y resolveré todas tus dudas encantado!")
+    messages.add_ai_message("Bienvenido a la USC, soy tu asistente personal y resolveré todas tus dudas encantado!\n"
+                            "\n"
+                            "Aqui tienes un atajo a la información disponible:\n"
+                            "- Áreas de estudio con sus grados y másteres.\n"
+                            "- Notas de corte por grado.\n"
+                            "- Portal de becas.\n"
+                            "- Calendario del curso actual.\n"
+                            "- Instalaciones deportivas y actividades.")
 
 llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613", openai_api_key=openai_api_key)
 agent_kwargs = {
@@ -81,6 +88,6 @@ for msg in messages.messages:
 
 if prompt := st.chat_input(disabled= not openai_api_key):
     st.chat_message("human").write(prompt)
-    with st.spinner("Thinking ..."):
+    with st.spinner("Rebuscando en mis archivos..."):
         response = open_ai_agent.run(prompt)
         st.chat_message("ai").write(response)
