@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 from PIL import Image
 from langchain.agents import AgentType
 from langchain.agents import initialize_agent
@@ -11,13 +12,13 @@ from langchain.prompts import MessagesPlaceholder
 from app.tools import AreasTool, EstudiosTool, NotasTool, BecasTool, CalendarioTool, DeportesTool
 
 
+def load_css():
+    with open("static/styles.css", "r") as f:
+        css = f"<style>{f.read()}</style>"
+        st.markdown(css, unsafe_allow_html=True)
 
-st.set_page_config(page_title="Asistente USC")
-st.title("Asistente USCBot 🤖")
 stop = False
-
 logo = Image.open("img/logo.jpg")
-
 with st.sidebar:
     st.image(logo)
     if 'OPENAI_API_KEY' in st.secrets:
@@ -61,14 +62,15 @@ system_message = SystemMessage(content= fixed_prompt)
 
 
 if len(messages.messages) == 0:
-    messages.add_ai_message("Bienvenido a la USC, soy tu asistente personal y resolveré todas tus dudas encantado!\n"
-                            "\n"
-                            "Aqui tienes un atajo a la información disponible:\n"
-                            "- Áreas de estudio con sus grados y másteres.\n"
-                            "- Notas de corte por grado.\n"
-                            "- Portal de becas.\n"
-                            "- Calendario del curso actual.\n"
-                            "- Instalaciones deportivas y actividades.")
+    initial_message = "Bienvenido a la USC, soy tu asistente personal y resolveré todas tus dudas encantado!\n"\
+                      "\n"\
+                      "Aqui tienes un atajo a la información disponible:\n"\
+                      "- Áreas de estudio con sus grados y másteres.\n"\
+                      "- Notas de corte por grado.\n"\
+                      "- Portal de becas.\n"\
+                      "- Calendario del curso actual.\n"\
+                      "- Instalaciones deportivas y actividades."
+    messages.add_ai_message(initial_message)
 
 llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613", openai_api_key=openai_api_key)
 agent_kwargs = {
@@ -82,12 +84,70 @@ open_ai_agent = initialize_agent(tools,
                                  verbose=True,
                                  memory=memory
                                  )
+#st.markdown(messages.messages)
 
-for msg in messages.messages:
-    st.chat_message(msg.type).write(msg.content)
-
-if prompt := st.chat_input(disabled= not openai_api_key):
-    st.chat_message("human").write(prompt)
+def on_click_callback(human_prompt):
     with st.spinner("Rebuscando en mis archivos..."):
-        response = open_ai_agent.run(prompt)
-        st.chat_message("ai").write(response)
+        open_ai_agent.run(human_prompt)
+
+
+load_css()
+
+
+centered_title = """
+<h1 style="text-align: center;">Asistente USCBot 🤖</h1>
+"""
+
+st.markdown(centered_title, unsafe_allow_html=True)
+
+chat_placeholder = st.container()
+prompt_placeholder = st.form("chat-form")
+credit_card_placeholder = st.empty()
+
+if human_prompt := st.chat_input(disabled= not openai_api_key):
+    on_click_callback(human_prompt)
+
+with chat_placeholder:
+    for msg in messages.messages:
+        div = f"""
+<div class="chat-row 
+    {'' if msg.type == 'ai' else 'row-reverse'}">
+    <img class="chat-icon" src="app/static/{
+        'ai_icon.png' if msg.type == 'ai'
+        else 'user_icon.png'}"
+         width=32 height=32>
+    <div class="chat-bubble
+    {'ai-bubble' if msg.type == 'ai' else 'human-bubble'}">
+        &#8203;{msg.content}
+    </div>
+</div>
+        """
+        st.markdown(div, unsafe_allow_html=True)
+
+    for _ in range(3):
+        st.markdown("")
+
+
+components.html("""
+<script>
+const streamlitDoc = window.parent.document;
+
+const buttons = Array.from(
+    streamlitDoc.querySelectorAll('.stButton > button')
+);
+const submitButton = buttons.find(
+    el => el.innerText === 'Submit'
+);
+
+streamlitDoc.addEventListener('keydown', function(e) {
+    switch (e.key) {
+        case 'Enter':
+            submitButton.click();
+            break;
+    }
+});
+</script>
+""",
+                height=0,
+                width=0,
+                )
