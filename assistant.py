@@ -19,15 +19,14 @@ def load_css():
 page_img = """
 <style>
 [data-testid="stSidebar"] {
-background-image: url("https://evelazco.com/wp-content/uploads/2024/02/bg45-jpg.webp");
-background-size: cover;
+background-color: #f0f2f6
 }
 </style>
 """
 st.markdown(page_img, unsafe_allow_html=True)
 
 stop = False
-logo = Image.open("img/logo.jpg")
+logo = Image.open("img/logo_usc.png")
 with st.sidebar:
     st.image(logo)
     if 'OPENAI_API_KEY' in st.secrets:
@@ -39,10 +38,9 @@ with st.sidebar:
             st.warning('Please, enter your OPENAI_API_KEY', icon='⚠️')
             stop = True
         else:
-            st.success('Preguntame tus dudas, te guiaré lo mejor que pueda!', icon='👉')
+            st.success('Pregúntame tus dudas, te guiaré lo mejor que pueda!', icon='👉')
 
-    st.markdown(""" Aqui podrás preguntar acerca de los grados disponibles y sus programas. Según tus intereses te ofreceré información que se adapte mejor a ti!
-    """)
+
 
 if stop:
     st.stop()
@@ -51,9 +49,11 @@ tools = [AreasTool(), EstudiosTool(), NotasTool(), BecasTool(), CalendarioTool()
 messages = StreamlitChatMessageHistory(key="langchain_messages")
 memory = ConversationBufferMemory(chat_memory=messages, return_messages=True)
 
-if st.sidebar.button("Reset Chat"):
-    messages.clear()
-    memory.clear()
+with st.sidebar:
+    col_1, col_2, col_3 = st.columns((0.8,1,0.5))
+    if col_2.button("Reset Chat"):
+        messages.clear()
+        memory.clear()
 
 
 fixed_prompt = '''Assistant is a large language model trained by OpenAI.
@@ -110,14 +110,16 @@ load_css()
 
 
 centered_title = """
-<h1 style="text-align: center;">Asistente USCBot 🤖</h1>
+<h1 style="text-align: center;">
+    <img src="app/static/ai_icon.png" style="vertical-align: middle; width: 50px; height: 50px;"> Asistente USC
+</h1>
 """
 
 st.markdown(centered_title, unsafe_allow_html=True)
 
 chat_placeholder = st.container()
 
-if human_prompt := st.chat_input(disabled= not openai_api_key):
+if human_prompt := st.chat_input(placeholder= "Escribe tu pregunta",disabled= not openai_api_key):
     input_response(human_prompt)
 
 with chat_placeholder:
