@@ -1,4 +1,6 @@
-# 🤖 Asistente USC
+<p align="center">
+  # 🤖 Asistente USC
+</p>
 
 Bienvenidos al asistente de la universidad de SdC
 
