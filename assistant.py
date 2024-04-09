@@ -30,15 +30,15 @@ logo = Image.open("img/logo_usc.png")
 with st.sidebar:
     st.image(logo)
     if 'OPENAI_API_KEY' in st.secrets:
-        st.success("OPENAI_API_KEY already provided!", icon='✅')
+        st.success("Acceso concedido!", icon='✅')
         openai_api_key = st.secrets['OPENAI_API_KEY']
     else:
-        openai_api_key = st.text_input('Enter your OPENAI_API_KEY: ', type='password')
+        openai_api_key = st.text_input('Introduce tu OPENAI_API_KEY para encenderme: ', type='password')
         if not openai_api_key:
-            st.warning('Please, enter your OPENAI_API_KEY', icon='⚠️')
+            st.warning('Sin OPENAI_API_KEY no me enciendo!', icon='⚠️')
             stop = True
         else:
-            st.success('Pregúntame tus dudas, te guiaré lo mejor que pueda!', icon='👉')
+            st.success('Acceso concedido!', icon='✅')
 
 
 
