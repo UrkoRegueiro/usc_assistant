@@ -1,8 +1,6 @@
-<p align="center">
-  # 🤖 Asistente USC
-</p>
+# 🤖 Asistente USC
 
-Bienvenidos al asistente de la universidad de SdC
+Bienvenidos al asistente de la universidad de Santiago de Compostela
 
 <p align="center">
   <img src="img/demo.gif" alt="Asistente USC" width="600"/>
