@@ -44,6 +44,7 @@ def get_estudios(area_url: str):
 
     return info_estudios
 
+
 def get_notas_corte():
     notas_url = usc_url + f"/es/admision/graos/notas-corte"
 
@@ -62,8 +63,6 @@ def get_notas_corte():
             tabla_notas += "Campus de Lugo: " + notas.get_text()
 
     return tabla_notas
-
-
 
 
 def get_becas():
@@ -146,4 +145,5 @@ def get_deportes(tipo_deporte: str = "instalaciones"):
                 info_deportes.append(info_deporte)
 
     return info_deportes
+
 

@@ -1,5 +1,4 @@
 import streamlit as st
-import streamlit.components.v1 as components
 from PIL import Image
 from langchain.agents import AgentType
 from langchain.agents import initialize_agent
@@ -16,6 +15,16 @@ def load_css():
     with open("static/styles.css", "r") as f:
         css = f"<style>{f.read()}</style>"
         st.markdown(css, unsafe_allow_html=True)
+
+page_img = """
+<style>
+[data-testid="stSidebar"] {
+background-image: url("https://evelazco.com/wp-content/uploads/2024/02/bg45-jpg.webp");
+background-size: cover;
+}
+</style>
+"""
+st.markdown(page_img, unsafe_allow_html=True)
 
 stop = False
 logo = Image.open("img/logo.jpg")
@@ -42,19 +51,26 @@ tools = [AreasTool(), EstudiosTool(), NotasTool(), BecasTool(), CalendarioTool()
 messages = StreamlitChatMessageHistory(key="langchain_messages")
 memory = ConversationBufferMemory(chat_memory=messages, return_messages=True)
 
+if st.sidebar.button("Reset Chat"):
+    messages.clear()
+    memory.clear()
+
+
 fixed_prompt = '''Assistant is a large language model trained by OpenAI.
 
 Assistant is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, Assistant is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
 
-Assistant doesn't know anything about degrees in Universidad de Santiago de Compostela or other universities.
+Assistant doesn't know anything about information related to the Universidad de Santiago de Compostela or other universities.
 
 Assistant doesn't know anything about the university calendar.
 
-Assistant will use 'DeportesTool' tool to offer information about any sport to find this activity.
+Assistant will use 'DeportesTool' tool to offer information about any sport activity.
 
 Assistant will use 'NotasTool' tool only once to the answer a user question about notas of every degree of a certain area.
 
-Assistant is constantly learning and improving, and its capabilities are constantly evolving. It is able to process and understand large amounts of text, and can use this knowledge to provide accurate and informative responses to a wide range of questions. Additionally, Assistant is able to generate its own text based on the input it receives, allowing it to engage in discussions and provide explanations and descriptions on a wide range of topics.
+Assistant is constantly learning and improving, and its capabilities are constantly evolving. It is able to process and understand large amounts of text, and can use this knowledge to provide summarized and informative responses to a wide range of questions. Additionally, Assistant is able to generate its own text based on the input it receives, allowing it to engage in discussions and provide explanations and descriptions on a wide range of topics.
+
+Assistant will answer concisely without further information.
 
 Overall, Assistant is a powerful system that can help with a wide range of tasks and provide valuable insights and information on a wide range of topics. Whether you need help with a specific question or just want to have a conversation about a particular topic, Assistant is here to assist.'''
 
@@ -84,9 +100,8 @@ open_ai_agent = initialize_agent(tools,
                                  verbose=True,
                                  memory=memory
                                  )
-#st.markdown(messages.messages)
 
-def on_click_callback(human_prompt):
+def input_response(human_prompt):
     with st.spinner("Rebuscando en mis archivos..."):
         open_ai_agent.run(human_prompt)
 
@@ -101,11 +116,9 @@ centered_title = """
 st.markdown(centered_title, unsafe_allow_html=True)
 
 chat_placeholder = st.container()
-prompt_placeholder = st.form("chat-form")
-credit_card_placeholder = st.empty()
 
 if human_prompt := st.chat_input(disabled= not openai_api_key):
-    on_click_callback(human_prompt)
+    input_response(human_prompt)
 
 with chat_placeholder:
     for msg in messages.messages:
@@ -126,28 +139,3 @@ with chat_placeholder:
 
     for _ in range(3):
         st.markdown("")
-
-
-components.html("""
-<script>
-const streamlitDoc = window.parent.document;
-
-const buttons = Array.from(
-    streamlitDoc.querySelectorAll('.stButton > button')
-);
-const submitButton = buttons.find(
-    el => el.innerText === 'Submit'
-);
-
-streamlitDoc.addEventListener('keydown', function(e) {
-    switch (e.key) {
-        case 'Enter':
-            submitButton.click();
-            break;
-    }
-});
-</script>
-""",
-                height=0,
-                width=0,
-                )

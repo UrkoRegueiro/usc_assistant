@@ -1,10 +1,8 @@
-from typing import Optional, Type, List, Tuple, Union, Dict
-
+from typing import Optional, Type, Tuple, Union, Dict
 from langchain.tools import BaseTool
 from pydantic import BaseModel
 
 from app.models import Estudios, Tipo, Deporte
-
 from app.functions import get_areas, get_estudios, get_notas_corte, get_becas, get_calendario, get_deportes
 
 
