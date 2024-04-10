@@ -7,3 +7,4 @@ pydantic
 beautifulsoup4
 streamlit
 requests
+regex
