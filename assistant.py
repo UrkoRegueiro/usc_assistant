@@ -8,7 +8,7 @@ from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
 from langchain.schema import SystemMessage
 from langchain.prompts import MessagesPlaceholder
 
-from app.tools import AreasTool, EstudiosTool, NotasTool, BecasTool, CalendarioTool, DeportesTool
+from app.tools import AreasTool, EstudiosTool, NotasTool, BecasTool, CalendarioTool, DeportesTool, IdiomasTool
 
 
 def load_css():
@@ -45,7 +45,7 @@ with st.sidebar:
 if stop:
     st.stop()
 
-tools = [AreasTool(), EstudiosTool(), NotasTool(), BecasTool(), CalendarioTool(), DeportesTool()]
+tools = [AreasTool(), EstudiosTool(), NotasTool(), BecasTool(), CalendarioTool(), DeportesTool(), IdiomasTool()]
 messages = StreamlitChatMessageHistory(key="langchain_messages")
 memory = ConversationBufferMemory(chat_memory=messages, return_messages=True)
 
@@ -64,9 +64,11 @@ Assistant doesn't know anything about information related to the Universidad de 
 
 Assistant doesn't know anything about the university calendar.
 
-Assistant will use 'DeportesTool' tool to offer information about any sport activity.
+Assistant will use 'DeportesTool' tool to offer information about any 'actividades' when the user asks about deportes or actividades.
 
 Assistant will use 'NotasTool' tool only once to the answer a user question about notas of every degree of a certain area.
+
+Assistant will use 'InfoIdiomasTool' tool only to the answer questions about a specific language.
 
 Assistant is constantly learning and improving, and its capabilities are constantly evolving. It is able to process and understand large amounts of text, and can use this knowledge to provide summarized and informative responses to a wide range of questions. Additionally, Assistant is able to generate its own text based on the input it receives, allowing it to engage in discussions and provide explanations and descriptions on a wide range of topics.
 
@@ -79,12 +81,13 @@ system_message = SystemMessage(content= fixed_prompt)
 
 if len(messages.messages) == 0:
     initial_message = "Bienvenido a la USC, soy tu asistente personal y resolveré todas tus dudas encantado!\n"\
-                      "\n"\
+                      "\n" \
                       "Aqui tienes un atajo a la información disponible:\n"\
-                      "- Áreas de estudio con sus grados y másteres.\n"\
-                      "- Notas de corte por grado.\n"\
+                      "- Áreas de estudio con sus grados, másteres y doctorados.\n"\
+                      "- Notas de corte por grado.\n" \
+                      "- Cursos de idiomas.\n" \
                       "- Portal de becas.\n"\
-                      "- Calendario del curso actual.\n"\
+                      "- Calendario académico del curso actual.\n"\
                       "- Instalaciones deportivas y actividades."
     messages.add_ai_message(initial_message)
 

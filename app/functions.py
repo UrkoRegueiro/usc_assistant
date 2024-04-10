@@ -1,3 +1,4 @@
+import re
 import requests
 from bs4 import BeautifulSoup
 
@@ -145,5 +146,49 @@ def get_deportes(tipo_deporte: str = "instalaciones"):
                 info_deportes.append(info_deporte)
 
     return info_deportes
+
+
+def get_idiomas():
+    idioma_url = usc_url + "/es/servizos/clm/cursos/italiano/curso_idioma.html?idioma=0"
+    response = requests.get(idioma_url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    idiomas = soup.find("div", class_= "blq-central").find_all("li")
+
+    texto = ""
+    for idioma in idiomas:
+        texto_idioma = idioma.find("a").get_text().strip() + "\n"
+
+    return texto
+
+
+def get_idiomas(idioma: str = "todos"):
+
+    idiomas = ["todos", "ingles", "aleman", "frances", "italiano", "checo", "español", "catalan", "potugues", "gallego"]
+    indices = [0, 1, 2, 3, 4, 5, 9, 10, 12, 13]
+    dic_idiomas = {lengua: idx for lengua, idx in zip(idiomas, indices)}
+
+    indice = dic_idiomas[idioma]
+    idioma_url = usc_url + f"/es/servizos/clm/cursos/italiano/curso_idioma.html?idioma={indice}"
+
+    response = requests.get(idioma_url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    niveles_idioma = soup.find("div", class_= "blq-central").find_all("li")
+
+    if idioma == "todos":
+        info_idiomas = ""
+        for nivel_idioma in niveles_idioma:
+            info_idiomas += re.sub(r'nivel \d+', '', nivel_idioma.find("a").get_text().strip() + "\n")
+
+    else:
+        info_idiomas = []
+        for nivel_idioma in niveles_idioma:
+            info_idioma = {"curso": re.sub(r'nivel \d+', '', nivel_idioma.find("a").get_text().strip()),
+                           "url_idioma": idioma_url.split("curso_idioma")[0] + nivel_idioma.find("a")["href"]}
+            info_idiomas.append(info_idioma)
+
+    return info_idiomas
+
+
 
 

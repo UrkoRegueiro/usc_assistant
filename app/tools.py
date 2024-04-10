@@ -2,8 +2,8 @@ from typing import Optional, Type, Tuple, Union, Dict
 from langchain.tools import BaseTool
 from pydantic import BaseModel
 
-from app.models import Estudios, Tipo, Deporte
-from app.functions import get_areas, get_estudios, get_notas_corte, get_becas, get_calendario, get_deportes
+from app.models import Estudios, Tipo, Deporte, Idioma
+from app.functions import get_areas, get_estudios, get_notas_corte, get_becas, get_calendario, get_deportes, get_idiomas
 
 
 class AreasTool(BaseTool):
@@ -68,3 +68,14 @@ class DeportesTool(BaseTool):
         return deportes
 
     args_schema: Optional[Type[BaseModel]] = Deporte
+
+
+class IdiomasTool(BaseTool):
+    name = "obten_info_idiomas"
+    description = "Obtiene informacion sobre un curso de idioma en la universidad. La informacion viene descritas por 'curso' y 'url_idioma'."
+
+    def _run(self, idioma: str = "todos"):
+        cursos_idiomas = get_idiomas(idioma)
+        return cursos_idiomas
+
+    args_schema: Optional[Type[BaseModel]] = Idioma
