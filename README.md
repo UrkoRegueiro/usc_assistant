@@ -1,4 +1,4 @@
-# 🤖 Asistente USC
+# 🤖 Asistente USC.
 
 Bienvenidos al [Asistente de la Universidad de Santiago de Compostela](https://usc-assistant.streamlit.app/)
 
@@ -27,3 +27,12 @@ Veamos un ejemplo de uso:
 <p align="center">
   
 </p>
+
+---
+## Tecnologías usadas
+
+**Lenguajes:** Python, CSS.
+
+**Librerias:** langchain, pydantic, beautifulsoup4, streamlit
+
+---
