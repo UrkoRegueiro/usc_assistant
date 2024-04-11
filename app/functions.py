@@ -190,5 +190,21 @@ def get_idiomas(idioma: str = "todos"):
     return info_idiomas
 
 
+def get_facultades():
+    centros_url = usc_url + "/es/centro"
 
+    response = requests.get(centros_url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    attrs = {"id": "block-centros"}
+    centros = soup.find("div", attrs=attrs).find_all("article", class_="ml-banner")
+
+    info_centros = []
+
+    for centro in centros:
+        info_centro = {"centro": centro.find("h2", class_="at-title").get_text(),
+                       "url_centro": usc_url + centro.find("a")["href"]}
+        info_centros.append(info_centro)
+
+    return info_centros
 

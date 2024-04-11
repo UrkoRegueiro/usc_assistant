@@ -3,7 +3,7 @@ from langchain.tools import BaseTool
 from pydantic import BaseModel
 
 from app.models import Estudios, Tipo, Deporte, Idioma
-from app.functions import get_areas, get_estudios, get_notas_corte, get_becas, get_calendario, get_deportes, get_idiomas
+from app.functions import get_areas, get_estudios, get_notas_corte, get_becas, get_calendario, get_deportes, get_idiomas, get_facultades
 
 
 class AreasTool(BaseTool):
@@ -79,3 +79,14 @@ class IdiomasTool(BaseTool):
         return cursos_idiomas
 
     args_schema: Optional[Type[BaseModel]] = Idioma
+
+
+class CentrosTool(BaseTool):
+    name = "obten_facultades"
+    description = "Obtiene el sitio web de las distintas facultades y escuelas de la universidad. La informacion viene descritas por 'centro' y 'url_centro'."
+
+    def _to_args_and_kwargs(self, tool_input: Union[str, Dict]) -> Tuple[Tuple, Dict]:
+        return (), {}
+    def _run(self):
+        centros = get_facultades()
+        return centros
