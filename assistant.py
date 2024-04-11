@@ -8,7 +8,7 @@ from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
 from langchain.schema import SystemMessage
 from langchain.prompts import MessagesPlaceholder
 
-from app.tools import AreasTool, EstudiosTool, NotasTool, BecasTool, CalendarioTool, DeportesTool, IdiomasTool
+from app.tools import AreasTool, EstudiosTool, NotasTool, BecasTool, CalendarioTool, DeportesTool, IdiomasTool, CentrosTool
 
 
 def load_css():
@@ -45,7 +45,7 @@ with st.sidebar:
 if stop:
     st.stop()
 
-tools = [AreasTool(), EstudiosTool(), NotasTool(), BecasTool(), CalendarioTool(), DeportesTool(), IdiomasTool()]
+tools = [AreasTool(), EstudiosTool(), NotasTool(), BecasTool(), CalendarioTool(), DeportesTool(), IdiomasTool(), CentrosTool()]
 messages = StreamlitChatMessageHistory(key="langchain_messages")
 memory = ConversationBufferMemory(chat_memory=messages, return_messages=True)
 
@@ -83,7 +83,8 @@ if len(messages.messages) == 0:
     initial_message = "Bienvenido a la USC, soy tu asistente personal y resolveré todas tus dudas encantado!\n"\
                       "\n" \
                       "Aqui tienes un atajo a la información disponible:\n"\
-                      "- Áreas de estudio con sus grados, másteres y doctorados.\n"\
+                      "- Áreas de estudio con sus grados, másteres y doctorados.\n" \
+                      "- Webs de cada centro.\n" \
                       "- Notas de corte por grado.\n" \
                       "- Cursos de idiomas.\n" \
                       "- Portal de becas.\n"\
