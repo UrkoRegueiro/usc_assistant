@@ -51,7 +51,7 @@ memory = ConversationBufferMemory(chat_memory=messages, return_messages=True)
 
 with st.sidebar:
     col_1, col_2, col_3 = st.columns((0.8,1,0.5))
-    if col_2.button("Reset Chat"):
+    if col_2.button("Limpiar Chat"):
         messages.clear()
         memory.clear()
 
