@@ -50,7 +50,20 @@ messages = StreamlitChatMessageHistory(key="langchain_messages")
 memory = ConversationBufferMemory(chat_memory=messages, return_messages=True)
 
 with st.sidebar:
+
     col_1, col_2, col_3 = st.columns((0.8,1,0.5))
+
+    languages = ["Spanish", "English"]
+    language = col_2.radio(
+        "Select your language:",
+        languages)
+
+    for lang in languages:
+        if lang != language:
+            messages.clear()
+            memory.clear()
+
+
     if col_2.button("Limpiar Chat"):
         messages.clear()
         memory.clear()
@@ -74,22 +87,38 @@ Assistant is constantly learning and improving, and its capabilities are constan
 
 Assistant will answer concisely without further information.
 
+Assistant will answer in the lenguage the user asks for.
+
 Overall, Assistant is a powerful system that can help with a wide range of tasks and provide valuable insights and information on a wide range of topics. Whether you need help with a specific question or just want to have a conversation about a particular topic, Assistant is here to assist.'''
 
 system_message = SystemMessage(content= fixed_prompt)
 
+if language == "English":
+    initial_message = "Welcome to USC, I am your personal assistant and I'll gladly address all your inquiries!\n"\
+                      "\n"\
+                      "Here's a shortcut to available information:\n"\
+                      "- Study areas with their undergraduate, master's, and doctoral degrees.\n"\
+                      "- Websites of each department.\n"\
+                      "- Admission cutoff scores per degree.\n"\
+                      "- Language courses.\n"\
+                      "- Scholarship portal.\n"\
+                      "- Current academic calendar.\n"\
+                      "- Sports facilities and activities."
 
-if len(messages.messages) == 0:
-    initial_message = "Bienvenido a la USC, soy tu asistente personal y resolveré todas tus dudas encantado!\n"\
+if language == "Spanish":
+    initial_message = "Bienvenido a la USC, soy tu asistente personal y resolveré todas tus dudas encantado!\n" \
                       "\n" \
-                      "Aqui tienes un atajo a la información disponible:\n"\
+                      "Aqui tienes un atajo a la información disponible:\n" \
                       "- Áreas de estudio con sus grados, másteres y doctorados.\n" \
                       "- Webs de cada centro.\n" \
                       "- Notas de corte por grado.\n" \
                       "- Cursos de idiomas.\n" \
-                      "- Portal de becas.\n"\
-                      "- Calendario académico del curso actual.\n"\
+                      "- Portal de becas.\n" \
+                      "- Calendario académico del curso actual.\n" \
                       "- Instalaciones deportivas y actividades."
+
+
+if len(messages.messages) == 0:
     messages.add_ai_message(initial_message)
 
 llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613", openai_api_key=openai_api_key)
