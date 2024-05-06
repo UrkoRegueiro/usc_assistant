@@ -33,7 +33,7 @@ with st.sidebar:
         st.success("Acceso concedido!", icon='✅')
         openai_api_key = st.secrets['OPENAI_API_KEY']
     else:
-        openai_api_key = st.text_input('Introduce tu OPENAI_API_KEY para encenderme: ', type='password')
+        openai_api_key = st.text_input('Introduce tu OPENAI_API_KEY: ', type='password')
         if not openai_api_key:
             st.warning('Sin OPENAI_API_KEY no me enciendo!', icon='⚠️')
             stop = True
