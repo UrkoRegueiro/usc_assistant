@@ -13,7 +13,7 @@ Bienvenidos al [Asistente de la Universidad de Santiago de Compostela](https://u
 - Ofrece información de los cursos de **idiomas** disponibles
 - Da información referente a **actividades deportivas**.
   
-A estas se le irán sumando más con el tiempo.  
+A estas se le irán sumando más funcionalidades con el tiempo.  
 
 
 Veamos un ejemplo de uso:
