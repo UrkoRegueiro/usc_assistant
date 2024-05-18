@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 from langchain.agents import AgentType
 from langchain.agents import initialize_agent
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
 from langchain.schema import SystemMessage
@@ -27,13 +27,14 @@ st.markdown(page_img, unsafe_allow_html=True)
 
 stop = False
 logo = Image.open("img/logo_usc.png")
+
 with st.sidebar:
     st.image(logo)
     if 'OPENAI_API_KEY' in st.secrets:
         st.success("Acceso concedido!", icon='✅')
         openai_api_key = st.secrets['OPENAI_API_KEY']
     else:
-        openai_api_key = st.text_input('Introduce tu OPENAI_API_KEY para encenderme: ', type='password')
+        openai_api_key = st.text_input('Introduce tu OPENAI_API_KEY: ', type='password')
         if not openai_api_key:
             st.warning('Sin OPENAI_API_KEY no me enciendo!', icon='⚠️')
             stop = True

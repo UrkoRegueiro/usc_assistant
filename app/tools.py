@@ -72,7 +72,7 @@ class DeportesTool(BaseTool):
 
 class IdiomasTool(BaseTool):
     name = "obten_info_idiomas"
-    description = "Obtiene informacion sobre un curso de idioma en la universidad. La informacion viene descritas por 'curso' y 'url_idioma'."
+    description = "Obtiene informacion sobre un curso de idioma en la universidad. La informacion viene descritas por 'curso_nivel', 'periodo', 'campus', 'url_matricula'."
 
     def _run(self, idioma: str = "todos"):
         cursos_idiomas = get_idiomas(idioma)

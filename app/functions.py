@@ -148,46 +148,56 @@ def get_deportes(tipo_deporte: str = "instalaciones"):
     return info_deportes
 
 
-def get_idiomas():
-    idioma_url = usc_url + "/es/servizos/clm/cursos/italiano/curso_idioma.html?idioma=0"
+def get_idiomas(idioma_elegido: str = "todos"):
+
+    idioma_url = usc_url + "/gl/centro/centro-linguas-modernas/linguas"
+
     response = requests.get(idioma_url)
     soup = BeautifulSoup(response.text, 'html.parser')
-    idiomas = soup.find("div", class_= "blq-central").find_all("li")
+    idiomas = soup.find("div", class_="tier-content").find_all("article", class_="ml-banner")
 
-    texto = ""
+    info_idiomas = []
     for idioma in idiomas:
-        texto_idioma = idioma.find("a").get_text().strip() + "\n"
+        info_idioma = {"curso": idioma.find("h2", class_="at-title").get_text(),
+                       "url_idioma": usc_url + idioma.find("a")["href"]}
 
-    return texto
+        info_idiomas.append(info_idioma)
 
+    lista_idiomas = [idioma.find("h2", class_="at-title").get_text() for idioma in idiomas]
+    indices = [i for i in range(len(lista_idiomas))]
+    dic_idiomas = {lengua: idx for lengua, idx in zip(lista_idiomas, indices)}
 
-def get_idiomas(idioma: str = "todos"):
-
-    idiomas = ["todos", "ingles", "aleman", "frances", "italiano", "checo", "español", "catalan", "potugues", "gallego"]
-    indices = [0, 1, 2, 3, 4, 5, 9, 10, 12, 13]
-    dic_idiomas = {lengua: idx for lengua, idx in zip(idiomas, indices)}
-
-    indice = dic_idiomas[idioma]
-    idioma_url = usc_url + f"/es/servizos/clm/cursos/italiano/curso_idioma.html?idioma={indice}"
-
-    response = requests.get(idioma_url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-
-    niveles_idioma = soup.find("div", class_= "blq-central").find_all("li")
-
-    if idioma == "todos":
-        info_idiomas = ""
-        for nivel_idioma in niveles_idioma:
-            info_idiomas += re.sub(r'nivel \d+', '', nivel_idioma.find("a").get_text().strip() + "\n")
+    if idioma_elegido == "todos":
+        return info_idiomas
 
     else:
-        info_idiomas = []
-        for nivel_idioma in niveles_idioma:
-            info_idioma = {"curso": re.sub(r'nivel \d+', '', nivel_idioma.find("a").get_text().strip()),
-                           "url_idioma": idioma_url.split("curso_idioma")[0] + nivel_idioma.find("a")["href"]}
-            info_idiomas.append(info_idioma)
+        indice = dic_idiomas[idioma_elegido]
+        url_idioma_elegido = info_idiomas[indice]["url_idioma"]
+        response_idioma_elegido = requests.get(url_idioma_elegido)
+        soup_idioma_elegido = BeautifulSoup(response_idioma_elegido.text, 'html.parser')
+        attrs = {"id": "block-usc-theme-content"}
+        attrs_1 = {"id": "clm-formative-activities"}
+        cursos_idioma_elegido = soup_idioma_elegido.find("div", attrs= attrs).find("div", attrs= attrs_1).find_all("article", class_= "ml-academic-subject")
 
-    return info_idiomas
+        info_niveles_idioma = []
+        for nivel_idioma in cursos_idioma_elegido:
+
+            matricula = nivel_idioma.find_all("dl")[2]
+            dts_matricula = matricula.find_all("dt")
+            dds_matricula = matricula.find_all("dd")
+            for dt, dd in zip(dts_matricula,dds_matricula):
+                if dt.string == "Acceso matrícula":
+                    enlace_matricula = dd.find("a")["href"]
+
+            info_nivel_idioma = {"curso_nivel": idioma_elegido + " " + nivel_idioma.find("h3", class_= "at-title").string.split("|")[0],
+                                 "periodo": nivel_idioma.find("h3", class_= "at-title").string.split("|")[2],
+                                 "campus" : nivel_idioma.find("h3", class_= "at-title").string.split("|")[3],
+                                 "url_matricula": enlace_matricula}
+            info_niveles_idioma.append(info_nivel_idioma)
+
+        return info_niveles_idioma
+
+
 
 
 def get_facultades():

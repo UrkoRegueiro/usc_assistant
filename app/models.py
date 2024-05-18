@@ -17,4 +17,4 @@ class Deporte(BaseModel):
 
 class Idioma(BaseModel):
     idioma: str = Field(default="todos",
-                        description="Los diferentes idiomas que se enseñan en la universidad. Puede ser uno de los siguientes: 'todos', 'ingles', 'aleman', 'frances', 'italiano', 'checo', 'español', 'catalan', 'potugues', 'gallego'. Por defecto a 'todos'")
+                        description="Los diferentes idiomas que se enseñan en la universidad. Puede ser uno de los siguientes: 'todos', 'Galego', 'Español', 'Alemán', 'Catalán', 'Francés', 'Inglés', 'Italiano', 'Portugués', 'Checo'. Por defecto a 'todos'")
