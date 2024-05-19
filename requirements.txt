@@ -6,3 +6,5 @@ beautifulsoup4
 streamlit
 requests
 regex
+langchain-community
+langchain-core

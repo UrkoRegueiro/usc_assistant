@@ -127,23 +127,40 @@ def get_deportes(tipo_deporte: str = "instalaciones"):
             info_deportes.append(info_deporte)
 
     if tipo_deporte == 'actividades':
-        deportes_url_solitario = usc_url + f"/es/servicios/area/deporte/'practica-libre'"
+        deportes_url_solitario = usc_url + f"/es/servicios/area/deporte/practica-libre"
         deportes_url_grupo = usc_url + f"/es/servicios/area/deporte/actividad-dirigida-escuelas"
 
         urls = [deportes_url_solitario, deportes_url_grupo]
         info_deportes = []
 
-        for url in urls:
-            response = requests.get(url)
-            soup = BeautifulSoup(response.text, 'html.parser')
+        for idx, url in enumerate(urls):
+            if idx == 0:
+                response = requests.get(url)
+                soup = BeautifulSoup(response.text, 'html.parser')
+                deportes = soup.find_all("article", class_="is-services")
+                info_deporte = []
+                for deporte in deportes:
+                    info = {"titulo_deporte": deporte.find("span", class_="title-inner-wrapper").get_text(),
+                            "url_deporte": deporte.find("a", class_="banner-link")["href"]}
+                    info_deporte.append(info)
 
-            deportes = soup.find_all("article", class_="is-services")
+                info_deporte_libre = {"deportes_practica_libre": info_deporte}
 
-            for deporte in deportes:
-                info_deporte = {"titulo_deporte": deporte.find("span", class_="title-inner-wrapper").get_text(),
-                                "url_deporte": deporte.find("a", class_="banner-link")["href"]}
+                info_deportes.append(info_deporte_libre)
 
-                info_deportes.append(info_deporte)
+            if idx == 1:
+                response = requests.get(url)
+                soup = BeautifulSoup(response.text, 'html.parser')
+                deportes = soup.find_all("article", class_="is-services")
+                info_deporte = []
+                for deporte in deportes:
+                    info = {"titulo_deporte": deporte.find("span", class_="title-inner-wrapper").get_text(),
+                            "url_deporte": deporte.find("a", class_="banner-link")["href"]}
+                    info_deporte.append(info)
+
+                info_deporte_grupo = {"deportes_grupo": info_deporte}
+
+                info_deportes.append(info_deporte_grupo)
 
     return info_deportes
 

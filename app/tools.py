@@ -60,7 +60,7 @@ class CalendarioTool(BaseTool):
 
 class DeportesTool(BaseTool):
     name = "obten_deportes"
-    description = "Obtiene informacion a cerca de deportes en la universidad. La informacion viene descritas por 'titulo_deporte' y 'url_deporte'."
+    description = "Obtiene informacion a cerca de deportes en la universidad. La informacion viene descritas por el tipo de deporte 'deportes_practica_libre' o 'deportes_grupo' descritos por 'titulo_deporte' y 'url_deporte'."
 
     def _run(self, tipo_deporte: str = "instalaciones"):
 

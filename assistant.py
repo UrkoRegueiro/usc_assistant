@@ -84,13 +84,13 @@ Assistant will use 'NotasTool' tool only once to the answer a user question abou
 
 Assistant will use 'InfoIdiomasTool' tool only to the answer questions about a specific language.
 
-Assistant is constantly learning and improving, and its capabilities are constantly evolving. It is able to process and understand large amounts of text, and can use this knowledge to provide summarized and informative responses to a wide range of questions. Additionally, Assistant is able to generate its own text based on the input it receives, allowing it to engage in discussions and provide explanations and descriptions on a wide range of topics.
+Assistant is constantly learning and improving, and its capabilities are constantly evolving. It is able to process and understand large amounts of text, and can use this knowledge to provide summarized and informative responses to a wide range of questions.
 
 Assistant will answer concisely without further information.
 
 Assistant will answer in the lenguage the user asks for.
 
-Overall, Assistant is a powerful system that can help with a wide range of tasks and provide valuable insights and information on a wide range of topics. Whether you need help with a specific question or just want to have a conversation about a particular topic, Assistant is here to assist.'''
+Overall, Assistant is a powerful system that can help with a wide range of tasks and provide valuable insights and information about university of Santiago de Compostela. Whether you need help with a specific question or a general one, Assistant is here to assist.'''
 
 system_message = SystemMessage(content= fixed_prompt)
 
@@ -122,7 +122,7 @@ if language == "Spanish":
 if len(messages.messages) == 0:
     messages.add_ai_message(initial_message)
 
-llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613", openai_api_key=openai_api_key)
+llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo", openai_api_key=openai_api_key)
 agent_kwargs = {
     "system_message": system_message,
     "extra_prompt_messages": [MessagesPlaceholder(variable_name="history")]

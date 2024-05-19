@@ -12,7 +12,7 @@ class Estudios(BaseModel):
 
 class Deporte(BaseModel):
     tipo_deporte: str = Field(default="instalaciones",
-                              description="Los diferentes tipos de actividad deportiva. Puede ser uno de los siguientes: 'instalaciones', 'actividades'. Por defecto a 'instalaciones'")
+                              description="Los diferentes tipos de actividad deportiva. SOLO puede ser uno de los siguientes valores: 'instalaciones', 'actividades'. Por defecto a 'instalaciones'")
 
 
 class Idioma(BaseModel):
