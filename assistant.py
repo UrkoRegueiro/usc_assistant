@@ -123,6 +123,10 @@ if len(messages.messages) == 0:
     messages.add_ai_message(initial_message)
 
 llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo", openai_api_key=openai_api_key)
+
+# Podemos utilizar llama3-8b:
+#llm = ChatOpenAI(model="llama3", base_url="http://localhost:11434/v1", openai_api_key= openai_api_key)
+
 agent_kwargs = {
     "system_message": system_message,
     "extra_prompt_messages": [MessagesPlaceholder(variable_name="history")]
@@ -137,7 +141,7 @@ open_ai_agent = initialize_agent(tools,
 
 def input_response(human_prompt):
     with st.spinner("Rebuscando en mis archivos..."):
-        open_ai_agent.run(human_prompt)
+        open_ai_agent.invoke(human_prompt)
 
 
 load_css()
