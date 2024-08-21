@@ -122,7 +122,7 @@ if language == "Spanish":
 if len(messages.messages) == 0:
     messages.add_ai_message(initial_message)
 
-llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo", openai_api_key=openai_api_key)
+llm = ChatOpenAI(temperature=0, model="gpt-4o-mini", openai_api_key=openai_api_key)
 
 # Podemos utilizar llama3-8b:
 #llm = ChatOpenAI(model="llama3", base_url="http://localhost:11434/v1", openai_api_key= openai_api_key)
